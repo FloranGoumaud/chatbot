@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot de conciergerie en ligne</title>
+</head>
+<body>
+    <h1>Chatbot de conciergerie en ligne</h1>
+    <div id="chatbot-container">
+        <div id="chatlog"></div>
+        <input type="text" id="user-input" placeholder="Posez votre question..." />
+        <button onclick="askQuestion()">Envoyer</button>
+    </div>
+
+    <script>
+        // Réponses aux questions
+        const responses = {
+            "Qu'est-ce qu'une conciergerie en ligne ?": "Une conciergerie en ligne est un service qui propose une assistance virtuelle pour vous aider dans vos tâches quotidiennes, comme la réservation de billets, la planification d'événements, la recherche d'informations, etc.",
+            "Quels services peut-on obtenir avec une conciergerie en ligne ?": "Les services offerts par une conciergerie en ligne peuvent varier, mais ils incluent généralement la réservation de voyages, la recherche de restaurants, l'organisation d'événements, l'achat de billets de spectacle, la gestion des tâches administratives, etc.",
+            "Comment fonctionne une conciergerie en ligne ?": "Une conciergerie en ligne utilise des technologies telles que l'intelligence artificielle et le traitement du langage naturel pour comprendre vos demandes et y répondre. Elle peut se connecter à différentes bases de données et sources d'informations pour vous fournir des réponses précises.",
+            "Est-ce que les conciergeries en ligne sont sécurisées ?": "Les bonnes conciergeries en ligne prennent la sécurité très au sérieux. Elles utilisent des protocoles de chiffrement pour protéger vos données personnelles et mettent en place des mesures de sécurité strictes pour éviter tout accès non autorisé.",
+            "Comment trouver une bonne conciergerie en ligne ?": "Pour trouver une bonne conciergerie en ligne, vous pouvez lire des avis en ligne, demander des recommandations à vos proches, ou consulter des sites spécialisés dans la comparaison de services. Assurez-vous de choisir une conciergerie réputée et fiable.",
+            "Quels sont les avantages d'une conciergerie en ligne ?": "Les avantages d'une conciergerie en ligne sont la commodité, le gain de temps, l'assistance personnalisée, l'accès à un large éventail de services, et la possibilité de déléguer des tâches fastidieuses ou complexes.",
+            "Est-ce que les conciergeries en ligne sont gratuites ?": "Certaines conciergeries en ligne offrent des services gratuits, tandis que d'autres proposent des formules d'abonnement ou facturent des frais pour chaque demande de service. Les modalités peuvent varier d'un service à l'autre.",
+            "Comment contacter une conciergerie en ligne ?": "La plupart des conciergeries en ligne proposent différents canaux de communication, tels que les chats en direct, les appels téléphoniques ou les courriels. Vous pouvez généralement trouver les informations de contact sur leur site web.",
+            "Quelles sont les limites d'une conciergerie en ligne ?": "Les conciergeries en ligne peuvent parfois avoir des difficultés à traiter des demandes complexes ou spécifiques. Elles dépendent également de la disponibilité des informations en ligne. Dans certains cas, une assistance humaine peut être nécessaire.",
+            "Est-ce que les conciergeries en ligne sont disponibles 24h/24 et 7j/7 ?": "Certaines conciergeries en ligne proposent un service 24h/24 et 7j/7, tandis que d'autres ont des horaires d'ouverture spécifiques. Il est important de vérifier les heures de disponibilité auprès du service que vous choisissez.",
+            "Comment les conciergeries en ligne peuvent-elles aider dans la recherche de services de formation ou d'apprentissage ?": "Les conciergeries en ligne peuvent vous aider à trouver des cours, des tutoriels ou des programmes de formation en fonction de vos intérêts et de vos objectifs d'apprentissage. Elles peuvent également fournir des informations sur les plateformes en ligne, les écoles ou les institutions qui offrent ces services.",
+            "Quels sont les services de location de vacances que les conciergeries en ligne peuvent réserver ?" :"Les conciergeries en ligne peuvent vous aider à réserver une variété de locations de vacances, notamment des maisons, des appartements, des villas, des chalets ou des hébergements insolites. Elles peuvent vous fournir des options en fonction de votre destination, de vos dates de séjour et de vos préférences en matière d'hébergement.",
+            "De quelle manière les conciergeries en ligne peuvent-elles apporter leur soutien dans le coaching personnel ou professionnel ?": "Les conciergeries en ligne peuvent vous mettre en relation avec des coachs spécialisés dans différents domaines tels que le développement personnel, la carrière, le leadership, ou la gestion du temps. Elles peuvent vous aider à trouver un coach adapté à vos besoins et à organiser des séances de coaching.",
+            "Quels types d'équipements ou d'outils peuvent être loués via les conciergeries en ligne ?": "Les conciergeries en ligne peuvent vous aider à trouver et à réserver une large gamme d'équipements ou d'outils, comme du matériel de bricolage, des instruments de musique, des équipements sportifs, des appareils électroniques, des voitures, des camping-cars, et bien plus encore.",
+            "Comment les conciergeries en ligne peuvent-elles faciliter la recherche de services de déménagement ?": "Les conciergeries en ligne peuvent vous aider à trouver des services de déménagement professionnels, à obtenir des devis, à comparer les prix et à planifier votre déménagement. Elles peuvent également vous fournir des conseils et des ressources pour simplifier le processus de déménagement.",
+            "Quelles options de restauration à domicile peuvent être réservées via les conciergeries en ligne ?": "Les conciergeries en ligne peuvent vous aider à réserver des services de traiteur, des chefs privés, des livraisons de repas préparés, des services de cuisinier à domicile ou des cours de cuisine à domicile. Elles peuvent s'adapter à vos préférences culinaires et à vos besoins spécifiques.",
+            "Comment les conciergeries en ligne peuvent-elles aider dans la gestion financière ou la planification de budget ?": "Les conciergeries en ligne peuvent vous fournir des conseils financiers, vous aider à élaborer un budget, à gérer vos dépenses, à trouver des solutions d'investissement, à comparer les offres bancaires, ou à obtenir des informations sur les services financiers.",
+            "Quels services de soins pour animaux de compagnie peuvent être recherchés via les conciergeries en ligne ?": "Les conciergeries en ligne peuvent vous aider à trouver des services de garde d'animaux, de promenade de chiens, de toilettage, de dressage, de visite à domicile, ou de soins vétérinaires pour vos animaux de compagnie. Elles peuvent vous recommander des professionnels qualifiés dans le domaine des soins pour animaux.",
+            "Quels types de réparations électroniques ou informatiques peuvent être trouvés grâce aux conciergeries en ligne ?": "Les conciergeries en ligne peuvent vous aider à trouver des services de réparation pour différents appareils électroniques, tels que des smartphones, des ordinateurs, des tablettes, des téléviseurs, des appareils électroménagers, des systèmes audio ou des équipements informatiques. Elles peuvent vous mettre en contact avec des techniciens qualifiés pour résoudre vos problèmes techniques.",
+            "Bonjour": "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+            "Comment ça va ?": "Je suis un chatbot, donc je n'ai pas de sentiments, mais je suis là pour vous aider ! Que puis-je faire pour vous ?",
+            "Quel est ton nom ?": "Je suis un chatbot sans nom, mais vous pouvez m'appeler Chatbot d'Assistance en ligne.",
+            "Qu'est-ce que tu fais ?": "Je suis un chatbot conçu pour fournir de l'assistance en ligne. Posez-moi vos questions et je ferai de mon mieux pour vous aider !",
+            "Comment te contacter ?": "Vous pouvez me contacter en saisissant votre question dans le champ de saisie ci-dessus et en cliquant sur le bouton Envoyer.",
+            "Merci": "De rien ! Je suis là pour vous aider.",
+            "Je ne suis pas satisfait de la réponse": "Je m'excuse si ma réponse n'a pas répondu à vos attentes. Pouvez-vous reformuler votre question ou poser une autre question pour que je puisse mieux vous aider ?",
+            "Peux-tu parler d'autre chose ?": "Bien sûr ! Je peux répondre à différentes questions sur les conciergeries en ligne, les services qu'elles proposent, leur fonctionnement, leur disponibilité, etc. N'hésitez pas à poser une autre question !",
+            "Quelles sont les langues que tu parles ?": "Je parle plusieurs langues, dont le français et l'anglais. Vous pouvez communiquer avec moi dans la langue que vous préférez.",
+            "Comment puis-je te désactiver ?": "Si vous souhaitez me désactiver, vous pouvez simplement fermer cette page web ou naviguer vers une autre page. Si vous avez d'autres questions, n'hésitez pas à les poser !"
+};
+
+function askQuestion() {
+  const userInput = document.getElementById('user-input').value.trim().toLowerCase(); // Convertir en minuscules et supprimer les espaces inutiles
+  const chatlog = document.getElementById('chatlog');
+
+  // Ajouter la question de l'utilisateur au chatlog
+  const userQuestion = document.createElement('p');
+  userQuestion.innerHTML = `<strong>Vous :</strong> ${userInput}`;
+  chatlog.appendChild(userQuestion);
+
+  // Vérifier si la question correspond à une réponse connue
+  let matchedResponse = false;
+
+  for (const question in responses) {
+    if (userInput.includes(question.toLowerCase())) { // Comparer en minuscules
+      // Obtenir la réponse
+      const answer = responses[question];
+      // Afficher la réponse dans le chatlog
+      const botResponse = document.createElement('p');
+      botResponse.innerHTML = `<strong>Chatbot :</strong> ${answer}`;
+      chatlog.appendChild(botResponse);
+      matchedResponse = true;
+      break;
+    }
+  }
+
+  if (!matchedResponse) {
+    // Vérifier si la question correspond à une réponse générique connue
+    if (userInput in genericResponses) {
+      // Obtenir la réponse générique
+      const answer = genericResponses[userInput];
+      // Afficher la réponse dans le chatlog
+      const botResponse = document.createElement('p');
+      botResponse.innerHTML = `<strong>Chatbot :</strong> ${answer}`;
+      chatlog.appendChild(botResponse);
+    } else {
+      // Réponse par défaut si la question est inconnue
+      const botResponse = document.createElement('p');
+      botResponse.innerHTML = "<strong>Chatbot :</strong> Je suis désolé, je ne peux pas répondre à cette question pour le moment.";
+      chatlog.appendChild(botResponse);
+    }
+  }
+
+  // Effacer le champ de saisie
+  document.getElementById('user-input').value = "";
+}
+    </script>
+</body>
+</html>
